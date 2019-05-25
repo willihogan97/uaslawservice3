@@ -83,7 +83,7 @@ class FilesMethods:
 		channel_fanout.exchange_declare(exchange=exchange_fanout, exchange_type='fanout', passive=False, durable=False, auto_delete=False)
 		ts = datetime.datetime.today().strftime('%d%B%Y%H%M%S')
 		filename = ts + "compressed"
-		zf = zipfile.ZipFile("../files/" + filename + ".zip", mode="w")
+		zf = zipfile.ZipFile("../../files/" + filename + ".zip", mode="w")
 		compression = zipfile.ZIP_DEFLATED
 		try:
 			counter = 10
@@ -116,59 +116,3 @@ class FilesMethods:
 		base64_hash = base64.urlsafe_b64encode(hashMd5)
 		str_hash = base64_hash.decode('utf-8').rstrip('=')
 		return url + "?md5=" + str_hash + "&expires=" + str(timestamp_expires);
-
-	@csrf_exempt
-	def download(url, counter):
-	# def download(url):
-		# filepath = "files/" + filename
-		# url = "http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg"
-		# url = "https://kaboompics.com/download/20325dd642cb3f812afc30aded8babb6/original"
-		# url = "https://images.pexels.com/photos/2317020/pexels-photo-2317020.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
-		downloadFile = urllib.request.urlopen(url)
-		mime = mimetypes.guess_type(url, strict=True)
-		ext = ""
-		if mime != None:
-			ext = mimetypes.guess_extension(mime[0])
-			print(ext)
-		ts = datetime.datetime.today().strftime('%d %B %Y, %H:%M:%S')
-		# content_dispotition = downloadFile.getheader('Content-Dispotition')
-		# print(content_dispotition)
-		# filename = ""
-		# if content_dispotition != None;
-
-		filepath = "../files/" + ts + "url" + counter + ext
-		# filepath = "../files/" + ts
-		datatowrite = downloadFile.read()
-		with open(filepath, 'wb') as f:  
-		    f.write(datatowrite)
-
-	@csrf_exempt
-	def send(request):
-		uniqueId = request.META['HTTP_X_ROUTING_KEY']
-		credentials = pika.PlainCredentials('1506725003', '697670')
-		connection = pika.BlockingConnection(pika.ConnectionParameters('152.118.148.103',5672,'1506725003', credentials))
-		channel = connection.channel()
-		exchange = '1506725003uas2018'
-		channel.exchange_declare(exchange=exchange, exchange_type='direct', passive=False, durable=False, auto_delete=False)
-
-		while(True) :
-			ts = datetime.datetime.today()
-			print(ts)
-			channel.basic_publish(exchange=exchange,
-								  routing_key='waktuServer',
-								  body=ts)
-			print(" [x] Sent " + ts)
-			time.sleep(1)
-		connection.close()
-		return JsonResponse({"status": "ok"})
-
-	@csrf_exempt
-	def compressedFile(filename, uniqueId, access_token):
-		url = "http://localhost:8300/compressed"
-		files = {'filename':filename, 'access_token': access_token}
-		header = {'X-ROUTING-KEY': uniqueId}
-		r = requests.post(url, data=json.dumps(files), headers=header)
-		return JsonResponse({
-			"status" : "ok",
-			"compressedFileName": "asdasd"
-		})
