@@ -82,8 +82,8 @@ class FilesMethods:
 		exchange_fanout = '1506725003_fanout'
 		channel_fanout.exchange_declare(exchange=exchange_fanout, exchange_type='fanout', passive=False, durable=False, auto_delete=False)
 		ts = datetime.datetime.today().strftime('%d%B%Y%H%M%S')
-		filenameCompressed = ts + "compressed"
-		zf = zipfile.ZipFile("../../files/download/" + filenameCompressed + ".zip", mode="w")
+		filenameCompressed = ts + "compressed.zip"
+		zf = zipfile.ZipFile("../../files/download/" + filenameCompressed, mode="w")
 		compression = zipfile.ZIP_DEFLATED
 		try:
 			counter = 10
@@ -109,7 +109,7 @@ class FilesMethods:
 	def createSecureLink(filename):
 		expire = timezone.now() + datetime.timedelta(minutes=10)
 		timestamp_expires = str(int(datetime.datetime.timestamp(expire)))
-		url = "/files/" + filename
+		url = "/download/" + filename
 		secret_link_md5 = url + str(timestamp_expires)
 		secret_link_md5 = secret_link_md5.encode('utf-8')
 		hashMd5 = hashlib.md5(secret_link_md5).digest()
