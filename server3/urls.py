@@ -17,10 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-# from files.views import FilesMethods
+from filesMethod.views import FilesMethods
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('', FilesMethods.orchestrator),
     # path('', FilesMethods.method),
 ]
 
