@@ -56,7 +56,7 @@ class FilesMethods:
 				print(len(allFilename))
 				if len(allFilename) == 10:
 					compressedFileReq = FilesMethods.compress(allFilename)
-					allFilename = []
+					allFilename.clear()
 					url = FilesMethods.createSecureLink(compressedFileReq)
 					channel_fanout.basic_publish(exchange=exchange_fanout,
 						routing_key='fanoutdataserver3',
