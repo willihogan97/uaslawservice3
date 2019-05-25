@@ -60,7 +60,7 @@ class FilesMethods:
 				print(len(allFilename))
 				if len(allFilename) == 10:
 					compressedFileReq = FilesMethods.compress(allFilename)
-					url = FilesMethods.createSecureLink(filename)
+					url = FilesMethods.createSecureLink(compressedFileReq)
 					channel_fanout.basic_publish(exchange=exchange_fanout,
 						routing_key='fanoutdataserver3',
 						body=url)
@@ -83,7 +83,7 @@ class FilesMethods:
 		channel_fanout.exchange_declare(exchange=exchange_fanout, exchange_type='fanout', passive=False, durable=False, auto_delete=False)
 		ts = datetime.datetime.today().strftime('%d%B%Y%H%M%S')
 		filenameCompressed = ts + "compressed"
-		zf = zipfile.ZipFile("../../files/" + filenameCompressed + ".zip", mode="w")
+		zf = zipfile.ZipFile("../../files/download/" + filenameCompressed + ".zip", mode="w")
 		compression = zipfile.ZIP_DEFLATED
 		try:
 			counter = 10
