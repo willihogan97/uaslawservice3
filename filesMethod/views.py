@@ -82,15 +82,15 @@ class FilesMethods:
 		exchange_fanout = '1506725003_fanout'
 		channel_fanout.exchange_declare(exchange=exchange_fanout, exchange_type='fanout', passive=False, durable=False, auto_delete=False)
 		ts = datetime.datetime.today().strftime('%d%B%Y%H%M%S')
-		filename = ts + "compressed"
-		zf = zipfile.ZipFile("../../files/" + filename + ".zip", mode="w")
+		filenameCompressed = ts + "compressed"
+		zf = zipfile.ZipFile("../../files/" + filenameCompressed + ".zip", mode="w")
 		compression = zipfile.ZIP_DEFLATED
 		try:
 			counter = 10
 			print(allFilename)
 			for filename in allFilename:
 				print(filename)
-				zf.write("../files/" + filename, filename, compress_type=compression)
+				zf.write("../../files/" + filename, filename, compress_type=compression)
 				channel_fanout.basic_publish(exchange=exchange_fanout,
 					routing_key='fanoutdataserver3',
 					body="persen " + str(counter))
@@ -103,7 +103,7 @@ class FilesMethods:
 		# for filepath in allFilepath:
 		# 	pass
 
-		return filename
+		return filenameCompressed
 
 	@csrf_exempt
 	def createSecureLink(filename):
