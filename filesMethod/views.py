@@ -47,11 +47,7 @@ class FilesMethods:
 
 		def callback(ch, method, properties, body):
 			print(" [x] %r:%r" % (method.routing_key, body))
-			# print(body.decode("UTF-8"))
-			# splitBody = body.decode("UTF-8").split(";")
 			msg = body.decode("UTF-8")
-			# counter = splitBody[0]
-			# urlFile = splitBody[1]
 			if msg[:11] == "urlberhasil":
 				splitMsg = msg.split(";")
 				filename = splitMsg[1]
@@ -64,10 +60,7 @@ class FilesMethods:
 					channel_fanout.basic_publish(exchange=exchange_fanout,
 						routing_key='fanoutdataserver3',
 						body=url)
-					print(url)
-				# channel.basic_publish(exchange=exchange,
-				# 	routing_key='fanoutdataserver2',
-				# 	body=url)
+					allFilename = []
 
 		channel_fanout.basic_consume(
 			queue=queue_name_fanout, on_message_callback=callback, auto_ack=True)
@@ -100,8 +93,6 @@ class FilesMethods:
 			print("An error occurred")
 		finally:
 			zf.close()
-		# for filepath in allFilepath:
-		# 	pass
 
 		return filenameCompressed
 
